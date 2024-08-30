@@ -16,11 +16,12 @@ import {
 import {
     Avatar,
     AvatarFallback,
+    AvatarImage,
     // AvatarImage
-} from "../ui/avatar"
+} from "../../ui/avatar"
 
 import React from "react"
-import { Button } from "../ui/button"
+import { Button } from "../../ui/button"
 import { useContext } from "react"
 // import { AuthContext } from "@/app/contexts/AuthContext"
 
@@ -34,9 +35,9 @@ const UserMenu = () => {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button >
+                    <Button variant="clean">
                         <Avatar>
-                            {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
+                            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                             <AvatarFallback>NB </AvatarFallback>
                         </Avatar>
                     </Button>
