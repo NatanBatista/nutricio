@@ -1,4 +1,5 @@
-import NavbarDefault from "@/components/default/navbar/navbar"
+import NavbarDefault from "./navbar"
+
 
 export default function DefaultLayout({
     children, // will be a page or nested layout
@@ -11,8 +12,8 @@ export default function DefaultLayout({
         <nav></nav>
         <NavbarDefault>
 
-        </NavbarDefault>
         {children}
+        </NavbarDefault>
       </section>
     )
   }
