@@ -1,13 +1,10 @@
 "use client"
 
+import { z } from "zod" 
 import React from "react"
-import { useContext } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
-
 import { Button } from "@/components/ui/button"
-
+import { zodResolver } from "@hookform/resolvers/zod"
 
 import {
     Form,
@@ -42,16 +39,15 @@ const SignIn = () => {
         },
     })
 
-    // async function onSubmit(data: z.infer<typeof FormSchema>) {
-    //     await signIn(data)
-    //     // console.log(JSON.stringify(data, null, 2))
-    // }
+    async function onSubmit(data: z.infer<typeof FormSchema>) {
+        // await signIn(data)
+        console.log(JSON.stringify(data, null, 2))
+    }
 
     return (
         <div className="flex justify-center items-center my-10">
             <Form {...form}>
-                <form className="w-2/3 space-y-6">
-
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
                     <FormField
                         control={form.control}
                         name="email"

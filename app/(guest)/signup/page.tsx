@@ -59,6 +59,11 @@ const SignUp = () => {
         },
     })
 
+    async function onSubmit(data: z.infer<typeof FormSchema>) {
+        // await signIn(data)
+        console.log(JSON.stringify(data, null, 2))
+    }
+
     // async function onSubmit(data: z.infer<typeof FormSchema>) {
     //     try {
     //         setIsLoading(true)
@@ -102,7 +107,7 @@ const SignUp = () => {
                     <TabsTrigger value="password">Senha</TabsTrigger>
                 </TabsList>
                 <Form {...form}>
-                    <form className="w-2/3 space-y-6">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
 
                         <TabsContent value="account">
                             <Card className="w-[650px]">
