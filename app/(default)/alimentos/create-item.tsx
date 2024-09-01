@@ -33,6 +33,7 @@ const FormSchema = z.object({
     calorie: z.number().min(0, ""),
     carbohydrate: z.number().min(0, ""),
     protein: z.number().min(0, ""),
+    lipids: z.number().min(0, ""),
     iron: z.number().min(0, ""),
     phosphorus: z.number().min(0, ""),
     fiber: z.number().min(0, ""),
@@ -61,6 +62,7 @@ const CreateItem = () => {
             calorie: 0,
             carbohydrate: 0,
             protein: 0,
+            lipids: 0,
             iron: 0,
             phosphorus: 0,
             fiber: 0,
@@ -97,6 +99,7 @@ const CreateItem = () => {
                     energy_kcal: data.calorie,
                     total_carbohydrate: data.carbohydrate,
                     protein: data.protein,
+                    lipids: data.lipids,
                     iron: data.iron,
                     phosphorus: data.phosphorus,
                     dietary_fiber: data.fiber,
@@ -119,7 +122,7 @@ const CreateItem = () => {
             setTimeout(() => {
                 window.location.reload();
             }, 700);
-            
+
             console.log(response)
         } catch (error) {
             return null
@@ -129,13 +132,13 @@ const CreateItem = () => {
     }
 
     const handleNumberChange = (
-        e: React.ChangeEvent<HTMLInputElement>, 
+        e: React.ChangeEvent<HTMLInputElement>,
         onChange: (value: any) => void
     ) => {
         // Substitui vírgulas por pontos para permitir a entrada de valores decimais
-        const inputValue = e.target.value.replace(',', '.'); 
+        const inputValue = e.target.value.replace(',', '.');
         const floatValue = parseFloat(inputValue);
-    
+
         // Verifica se o valor inserido é um número positivo
         if (!isNaN(floatValue) && floatValue >= 0) {
             onChange(floatValue); // Atualiza o valor no estado do formulário
@@ -145,8 +148,8 @@ const CreateItem = () => {
             // setError("calorie", { type: "manual", message: "O valor inserido deve ser um número positivo." });
         }
     };
-    
-    
+
+
 
 
     return (
@@ -185,11 +188,11 @@ const CreateItem = () => {
                                         control={form.control}
                                         name="calorie"
                                         render={({ field }) => (
-                                            <FormItem>
+                                            <FormItem className="col-span-2">
                                                 <FormLabel>Caloria</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number"   
+                                                        type="number"
                                                         placeholder="Caloria"
                                                         {...field}
                                                         onChange={(e) => handleNumberChange(e, field.onChange)}
@@ -208,10 +211,10 @@ const CreateItem = () => {
                                                 <FormLabel>Carboidrato</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Carboidrato" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Carboidrato"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -227,10 +230,29 @@ const CreateItem = () => {
                                                 <FormLabel>Proteína</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Proteína" 
-                                                    {...field}
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Proteína"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="lipids"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Lipidio</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="number"
+                                                        placeholder="Lipidio"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -246,10 +268,10 @@ const CreateItem = () => {
                                                 <FormLabel>Ferro</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Ferro" 
-                                                    {...field}
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)} 
+                                                        type="number"
+                                                        placeholder="Ferro"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -265,10 +287,10 @@ const CreateItem = () => {
                                                 <FormLabel>Fósforo</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Fósforo" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Fósforo"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -284,10 +306,10 @@ const CreateItem = () => {
                                                 <FormLabel>Fibra</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Fibra" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Fibra"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -303,10 +325,10 @@ const CreateItem = () => {
                                                 <FormLabel>Vitamina A</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Vitamina A" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Vitamina A"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -322,10 +344,10 @@ const CreateItem = () => {
                                                 <FormLabel>Vitamina B0</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Vitamina B0" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Vitamina B0"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -341,10 +363,10 @@ const CreateItem = () => {
                                                 <FormLabel>Vitamina B3</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Vitamina B3" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Vitamina B3"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -360,10 +382,10 @@ const CreateItem = () => {
                                                 <FormLabel>Vitamina B6</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Vitamina B6" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Vitamina B6"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -379,10 +401,10 @@ const CreateItem = () => {
                                                 <FormLabel>Vitamina C</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Vitamina C" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Vitamina C"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -398,10 +420,10 @@ const CreateItem = () => {
                                                 <FormLabel>Magnésio</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Magnésio" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Magnésio"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -417,10 +439,10 @@ const CreateItem = () => {
                                                 <FormLabel>Manganês</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Manganês" 
-                                                    {...field}
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)} 
+                                                        type="number"
+                                                        placeholder="Manganês"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -436,10 +458,10 @@ const CreateItem = () => {
                                                 <FormLabel>Cobre</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Cobre" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Cobre"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -455,10 +477,10 @@ const CreateItem = () => {
                                                 <FormLabel>Zinco</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Zinco" 
-                                                    {...field}
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Zinco"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -474,10 +496,10 @@ const CreateItem = () => {
                                                 <FormLabel>Sódio</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Sódio" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Sódio"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -493,10 +515,10 @@ const CreateItem = () => {
                                                 <FormLabel>Potássio</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Potássio" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Potássio"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -512,10 +534,10 @@ const CreateItem = () => {
                                                 <FormLabel>Cálcio</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        type="number" 
-                                                    placeholder="Cálcio" 
-                                                    {...field} 
-                                                    onChange={(e) => handleNumberChange(e, field.onChange)}
+                                                        type="number"
+                                                        placeholder="Cálcio"
+                                                        {...field}
+                                                        onChange={(e) => handleNumberChange(e, field.onChange)}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -526,10 +548,10 @@ const CreateItem = () => {
                             </div>
                             <DialogFooter>
                                 {
-                                    loading ? 
-                                    <Button type="submit"> <LoaderCircle className="mr-2 h-6 w-6 animate-spin" /> </Button>
-                                    :
-                                    <Button type="submit">Criar alimento</Button>
+                                    loading ?
+                                        <Button type="submit"> <LoaderCircle className="mr-2 h-6 w-6 animate-spin" /> </Button>
+                                        :
+                                        <Button type="submit">Criar alimento</Button>
                                 }
                             </DialogFooter>
                         </form>
