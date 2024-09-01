@@ -1,6 +1,9 @@
-import React from "react";
-import DataTable from "./data-table";
+"use client";
 
+import axios from 'axios'
+import DataTable from "./data-table";
+import CreateItem from "./create-item";
+import React, { useEffect, useState } from "react";
 
 import {
     Pagination,
@@ -11,110 +14,62 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import CreateItem from "./create-item";
+
+interface NutricionalValue {
+    id: number;
+    protein: number;
+    total_carbohydrate: number;
+    lipids: number;
+    dietary_fiber: number;
+    energy_kcal: number;
+    vitamin_a: number;
+    vitamin_c: number;
+    thiamine: number;
+    niacin: number;
+    vitamin_b6: number;
+    phosphorus: number;
+    iron: number;
+    sodium: number;
+    potassium: number;
+    calcium: number;
+    magnesium: number;
+    manganese: number;
+    copper: number;
+    zinc: number;
+    food_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
+// Tipo para o alimento (food)
+interface Food {
+    id: number;
+    name: string;
+    table: string;
+    scientific_name: string;
+    code: string;
+    created_at: string;
+    updated_at: string;
+    nutricional_value: NutricionalValue;
+}
 
 const Alimentos = () => {
-    const Alimentos = [
-        {
-            nome: "Pao",
-            caloria: 265,
-            carboitrado: 12,
-            proteina: 15,
-            ferro: 0.456,
-            fosforo: 23.1,
-            fibra: 2.7,
-            vitamina_a: 0,
-            vitamina_b: 0.15,
-            vitamina_c: 0
-        },
-        {
-            nome: "Arroz",
-            caloria: 130,
-            carboitrado: 28,
-            proteina: 2.7,
-            ferro: 0.2,
-            fosforo: 43,
-            fibra: 1.8,
-            vitamina_a: 0,
-            vitamina_b: 0.12,
-            vitamina_c: 0
-        },
-        {
-            nome: "Feijao",
-            caloria: 347,
-            carboitrado: 21,
-            proteina: 9,
-            ferro: 2.1,
-            fosforo: 142,
-            fibra: 15.2,
-            vitamina_a: 0,
-            vitamina_b: 0.5,
-            vitamina_c: 0
-        },
-        {
-            nome: "Carne",
-            caloria: 250,
-            carboitrado: 0,
-            proteina: 26,
-            ferro: 2.7,
-            fosforo: 198,
-            fibra: 0,
-            vitamina_a: 0,
-            vitamina_b: 0.2,
-            vitamina_c: 0
-        },
-        {
-            nome: "Leite",
-            caloria: 42,
-            carboitrado: 5,
-            proteina: 3.4,
-            ferro: 0.03,
-            fosforo: 101,
-            fibra: 0,
-            vitamina_a: 47,
-            vitamina_b: 0.04,
-            vitamina_c: 0
-        },
-        {
-            nome: "Ovo",
-            caloria: 155,
-            carboitrado: 1.1,
-            proteina: 13,
-            ferro: 1.2,
-            fosforo: 86,
-            fibra: 0,
-            vitamina_a: 64,
-            vitamina_b: 0.06,
-            vitamina_c: 0
-        },
-        {
-            nome: "Banana",
-            caloria: 89,
-            carboitrado: 23,
-            proteina: 1.3,
-            ferro: 0.3,
-            fosforo: 26,
-            fibra: 2.6,
-            vitamina_a: 3,
-            vitamina_b: 0.4,
-            vitamina_c: 8.7
-        },
-        {
-            nome: "Maçã",
-            caloria: 52,
-            carboitrado: 14,
-            proteina: 0.3,
-            ferro: 0.1,
-            fosforo: 11,
-            fibra: 2.4,
-            vitamina_a: 3,
-            vitamina_b: 0.02,
-            vitamina_c: 4.6
-        }
-    ];
+    const [foods, setFoods] = useState<Food[]>([]);
 
+
+    async function fetchData() {
+        try {
+            const response = await axios.get('http://localhost:3001/foods');
+            setFoods(response.data); // Popula o estado 'food' com os dados da resposta
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+    
+    useEffect(() => {
+        fetchData(); // Chama a função fetchData quando o componente monta
+    }, []);
 
     return (
         <>
@@ -122,7 +77,7 @@ const Alimentos = () => {
                 <h1 className="text-2xl font-bold mb-10"> Alimentos </h1>
                 <CreateItem />
             </div>
-            <DataTable alimentos={Alimentos} />
+            <DataTable Foods={foods} />
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>

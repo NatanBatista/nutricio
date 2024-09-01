@@ -1,33 +1,66 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
+import React, { useState } from "react";
+import ExclusionButton from "./exclusion-button";
+import { FilePenLine } from "lucide-react";
 import { ScrollBar, ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableCaption, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import React from "react";
-import ExclusionButton from "./exclusion-button";
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 
+interface NutricionalValue {
+    id: number;
+    protein: number;
+    total_carbohydrate: number;
+    lipids: number;
+    dietary_fiber: number;
+    energy_kcal: number;
+    vitamin_a: number;
+    vitamin_c: number;
+    thiamine: number;
+    niacin: number;
+    vitamin_b6: number;
+    phosphorus: number;
+    iron: number;
+    sodium: number;
+    potassium: number;
+    calcium: number;
+    magnesium: number;
+    manganese: number;
+    copper: number;
+    zinc: number;
+    food_id: number;
+    created_at: string;
+    updated_at: string;
+}
 
-type Alimentos = {
-    nome: string
-    caloria: number
-    carboitrado: number
-    proteina: number
-    ferro: number
-    fosforo: number
-    fibra: number
-    vitamina_a: number
-    vitamina_b: number
-    vitamina_c: number
-};
+// Tipo para o alimento (food)
+interface Food {
+    id: number;
+    name: string;
+    table: string;
+    scientific_name: string;
+    code: string;
+    created_at: string;
+    updated_at: string;
+    nutricional_value: NutricionalValue;
+}
 
 type DataTableProps = {
-    alimentos: Alimentos[]
-};
-
+    Foods: Food[]
+}
 
 const DataTable: React.FC<DataTableProps> = ({
-    alimentos
+    Foods
 }) => {
+
+    const [edit, setEdit] = useState(true)
+
+    const EditingValues = () => {
+        setEdit(!edit)
+    }
+
     return (
         <>
             <ScrollArea className="w-96 sm:whitespace-nowrap sm:w-full">
@@ -48,53 +81,70 @@ const DataTable: React.FC<DataTableProps> = ({
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {alimentos.map(
-                            (alimento, index) => (
-                                <Drawer key={index}>
-                                    <DrawerTrigger asChild>
-                                        <TableRow>
-                                            <TableCell className="font-medium"> {alimento.nome} </TableCell>
-                                            <TableCell className="text-right">{alimento.caloria}</TableCell>
-                                            <TableCell className="text-right">{alimento.carboitrado}</TableCell>
-                                            <TableCell className="text-right">{alimento.proteina}</TableCell>
-                                            <TableCell className="text-right">{alimento.ferro}</TableCell> 
-                                            <TableCell className="text-right">{alimento.fosforo}</TableCell> 
-                                            <TableCell className="text-right">{alimento.fibra}</TableCell> 
-                                            <TableCell className="text-right">{alimento.vitamina_a}</TableCell> 
-                                            <TableCell className="text-right">{alimento.vitamina_b}</TableCell> 
-                                            <TableCell className="text-right">{alimento.vitamina_c}</TableCell> 
-                                        </TableRow>
-                                    </DrawerTrigger>
-                                    <DrawerContent>
-                                        <div className="mx-auto w-full max-w-md">
-                                            <DrawerHeader >
-                                                <DrawerTitle>{alimento.nome}</DrawerTitle>
-                                                <DrawerDescription>Alterar dados do alimento</DrawerDescription>
-                                            </DrawerHeader>
-                                            <div className="grid grid-cols-4 gap-4">
-                                                <Input type="" placeholder="Caloria" defaultValue={alimento.caloria} />
-                                                <Input type="" placeholder="Carboitrado" defaultValue={alimento.carboitrado} />
-                                                <Input type="" placeholder="Proteina" defaultValue={alimento.proteina} />
-                                                <Input type="" placeholder="Ferro" defaultValue={alimento.ferro} />
-                                                <Input type="" placeholder="Fósforo" defaultValue={alimento.fosforo} />
-                                                <Input type="" placeholder="Fibra" defaultValue={alimento.fibra} />
-                                                <Input type="" placeholder="Vitamina a" defaultValue={alimento.vitamina_a} />
-                                                <Input type="" placeholder="Vitamina b" defaultValue={alimento.vitamina_b} />
-                                                <Input type="" placeholder="Vitamnia c" defaultValue={alimento.vitamina_c} />
+                        {Foods ?
+                            Foods.map(
+                                (Food, index) => (
+                                    <Drawer key={index}>
+                                        <DrawerTrigger asChild>
+                                            <TableRow>
+                                                <TableCell className="font-medium"> {Food.name} </TableCell>
+                                                <TableCell className="text-right">{Food.nutricional_value.energy_kcal}</TableCell>
+                                                <TableCell className="text-right">{Food.nutricional_value.total_carbohydrate}</TableCell>
+                                                <TableCell className="text-right">{Food.nutricional_value.protein}</TableCell>
+                                                <TableCell className="text-right">{Food.nutricional_value.iron}</TableCell>
+                                                <TableCell className="text-right">{Food.nutricional_value.phosphorus}</TableCell>
+                                                <TableCell className="text-right">{Food.nutricional_value.dietary_fiber}</TableCell>
+                                                <TableCell className="text-right">{Food.nutricional_value.vitamin_a}</TableCell>
+                                                <TableCell className="text-right">{Food.nutricional_value.vitamin_b6}</TableCell>
+                                                <TableCell className="text-right">{Food.nutricional_value.vitamin_c}</TableCell>
+                                            </TableRow>
+                                        </DrawerTrigger>
+                                        <DrawerContent>
+                                            <div className="mx-auto w-full max-w-md">
+                                                <DrawerHeader className="flex justify-between">
+                                                    <div>
+                                                    <DrawerTitle>{Food.name}</DrawerTitle>
+                                                    <DrawerDescription>Alterar dados do alimento</DrawerDescription>
+                                                    </div>
+                                                    <Button onClick={EditingValues} variant="outline"> <FilePenLine /> </Button>
+                                                </DrawerHeader>
+                                                <div className="grid grid-cols-4 gap-4">
+                                                    <Input disabled={edit} className="col-span-2" placeholder="Caloria" defaultValue={Food.nutricional_value.energy_kcal} />
+                                                    <Input disabled={edit} type="" placeholder="Carboitrado" defaultValue={Food.nutricional_value.total_carbohydrate} />
+                                                    <Input disabled={edit} type="" placeholder="Proteina" defaultValue={Food.nutricional_value.protein} />
+                                                    <Input disabled={edit} type="" placeholder="Proteina" defaultValue={Food.nutricional_value.lipids} />
+                                                    <Input disabled={edit} type="" placeholder="Ferro" defaultValue={Food.nutricional_value.iron} />
+                                                    <Input disabled={edit} type="" placeholder="Fósforo" defaultValue={Food.nutricional_value.phosphorus} />
+                                                    <Input disabled={edit} type="" placeholder="Fibra" defaultValue={Food.nutricional_value.dietary_fiber} />
+                                                    <Input disabled={edit} type="" placeholder="Vitamina a" defaultValue={Food.nutricional_value.vitamin_a} />
+                                                    <Input disabled={edit} type="" placeholder="Vitamina b1" defaultValue={Food.nutricional_value.thiamine} />
+                                                    <Input disabled={edit} type="" placeholder="Vitamina b3" defaultValue={Food.nutricional_value.niacin} />
+                                                    <Input disabled={edit} type="" placeholder="Vitamina b6" defaultValue={Food.nutricional_value.vitamin_b6} />
+                                                    <Input disabled={edit} type="" placeholder="Vitamnia c" defaultValue={Food.nutricional_value.vitamin_c} />
+                                                    <Input disabled={edit} type="" placeholder="Magnesio" defaultValue={Food.nutricional_value.magnesium} />
+                                                    <Input disabled={edit} type="" placeholder="Mânganes" defaultValue={Food.nutricional_value.manganese} />
+                                                    <Input disabled={edit} type="" placeholder="Cobre" defaultValue={Food.nutricional_value.copper} />
+                                                    <Input disabled={edit} type="" placeholder="Zinco" defaultValue={Food.nutricional_value.zinc} />
+                                                    <Input disabled={edit} type="" placeholder="Sodio" defaultValue={Food.nutricional_value.sodium} />
+                                                    <Input disabled={edit} type="" placeholder="Potassio" defaultValue={Food.nutricional_value.potassium} />
+                                                    <Input disabled={edit} type="" placeholder="Calcio" defaultValue={Food.nutricional_value.calcium} />
+                                                </div>
+                                                <DrawerFooter>
+                                                    <Button disabled={edit}>Alterar</Button>
+                                                    <ExclusionButton id={Food.id}/>
+                                                    <DrawerClose asChild>
+                                                        <Button variant="outline"> Cancelar </Button>
+                                                    </DrawerClose>
+                                                </DrawerFooter>
                                             </div>
-                                            <DrawerFooter>
-                                                <Button>Alterar</Button>
-                                                <ExclusionButton />
-                                                <DrawerClose asChild>
-                                                    <Button variant="outline"> Cancelar </Button>
-                                                </DrawerClose>
-                                            </DrawerFooter>
-                                        </div>
 
-                                    </DrawerContent>
-                                </Drawer>
+                                        </DrawerContent>
+                                    </Drawer>
+                                )
                             )
-                        )}
+                            :
+                            <></>
+                        }
 
                     </TableBody>
                 </Table>
