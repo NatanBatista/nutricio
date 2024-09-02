@@ -23,14 +23,11 @@ import {
 import React from "react"
 import { Button } from "../../ui/button"
 import { useContext } from "react"
+import ButtonSignOut from "./buttonSignOut"
+import { redirect } from "next/navigation"
 // import { AuthContext } from "@/app/contexts/AuthContext"
 
-const UserMenu = () => {
-    // const { signOut, user } = useContext(AuthContext)
-
-    // const handleSignOut = async () => {
-    //     await signOut()
-    // }
+const UserMenu = async () => {
     return (
         <>
             <DropdownMenu>
@@ -78,10 +75,7 @@ const UserMenu = () => {
                     <DropdownMenuItem disabled>Support</DropdownMenuItem>
                     <DropdownMenuItem disabled>API</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                        Log out
-                        <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                    </DropdownMenuItem>
+                    <ButtonSignOut />
                 </DropdownMenuContent>
             </DropdownMenu>
         </>
