@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import React from "react"
@@ -25,6 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useState } from "react"
 import { toast } from "@/components/ui/use-toast"
+import axios from "axios"
 
 const FormSchema = z.object({
     email: z.string().email({
@@ -59,45 +59,45 @@ const SignUp = () => {
         },
     })
 
-    async function onSubmit(data: z.infer<typeof FormSchema>) {
-        // await signIn(data)
-        console.log(JSON.stringify(data, null, 2))
-    }
-
     // async function onSubmit(data: z.infer<typeof FormSchema>) {
-    //     try {
-    //         setIsLoading(true)
-    //         const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth`, {
-    //             "email": data.email,
-    //             "nickname": data.nickname,
-    //             "password": data.password,
-    //             "password-confirmation": data.password_confirmation
-    //         })
-    //         router.push("/")
-    //         toast({
-    //             variant: "default",
-    //             title: "Conta criada com sucesso!",
-    //             description: `Um email com instruções de ativação foi enviado para ${
-    //                 response.data.data.email
-    //             }`
-    //         })
-    //     } catch (error: any) {
-    //         const errors = error.response.data.errors
-    //         if (errors.full_messages) {
-    //             errors.full_messages.forEach((message: string) => {
-    //                 toast({
-    //                     variant: "destructive",
-    //                     title: "Erro",
-    //                     description: message,
-    //                 })
-    //             })
-    //         }
-    //     } 
-    //     finally {
-    //         setIsLoading(false)
-    //     }
-
+    //     // await signIn(data)
+    //     console.log(JSON.stringify(data, null, 2))
     // }
+
+    async function onSubmit(data: z.infer<typeof FormSchema>) {
+        try {
+            setIsLoading(true)
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth`, {
+                "email": data.email,
+                "nickname": data.nickname,
+                "password": data.password,
+                "password-confirmation": data.password_confirmation
+            })
+            router.push("/")
+            toast({
+                variant: "default",
+                title: "Conta criada com sucesso!",
+                description: `Um email com instruções de ativação foi enviado para ${
+                    response.data.data.email
+                }`
+            })
+        } catch (error: any) {
+            const errors = error.response.data.errors
+            if (errors.full_messages) {
+                errors.full_messages.forEach((message: string) => {
+                    toast({
+                        variant: "destructive",
+                        title: "Erro",
+                        description: message,
+                    })
+                })
+            }
+        } 
+        finally {
+            setIsLoading(false)
+        }
+
+    }
 
     return (
         <div className="flex justify-center items-center my-10">
