@@ -1,4 +1,6 @@
-import React from "react";
+"use client"
+
+import React, { useEffect, useState } from "react";
 import AlterRow from "./alter-row";
 import { ScrollBar, ScrollArea } from "@/components/ui/scroll-area";
 
@@ -15,17 +17,26 @@ import {
     TableHead, TableBody,
     TableCell
 } from "@/components/ui/table";
+import axios from "axios";
 
 
 
+const DataTable = () => {
 
-type DataTableProps = {
-    Foods: Food[]
-}
+    const [foods, setFoods ] = useState<Food[]>([])
+    async function fetchData() {
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/foods`);
+            setFoods(response.data); // Popula o estado 'food' com os dados da resposta
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
 
-const DataTable: React.FC<DataTableProps> = ({
-    Foods
-}) => {
+    useEffect(() => {
+        fetchData(); // Chama a função fetchData quando o componente monta
+    }, []);
 
     return (
         <>
@@ -47,8 +58,8 @@ const DataTable: React.FC<DataTableProps> = ({
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {Foods ?
-                            Foods.map(
+                        {foods ?
+                            foods.map(
                                 (Food, index) => (
                                     <Drawer key={index}>
                                         <DrawerTrigger asChild>

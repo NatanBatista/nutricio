@@ -1,9 +1,6 @@
-"use client";
-
-import axios from 'axios'
 import DataTable from "./data-table";
 import CreateItem from "./create-item";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import {
     Pagination,
@@ -14,24 +11,15 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-const Alimentos = () => {
-    const [foods, setFoods] = useState<Food[]>([]);
-
-
-    async function fetchData() {
-        try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/foods`);
-            setFoods(response.data); // Popula o estado 'food' com os dados da resposta
-            console.log(response.data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+const Alimentos = async () => {
+    const session = await auth()
+ 
+    if (!session) {
+        redirect('/')
     }
-
-    useEffect(() => {
-        fetchData(); // Chama a função fetchData quando o componente monta
-    }, []);
 
     return (
         <>
@@ -39,7 +27,7 @@ const Alimentos = () => {
                 <h1 className="text-2xl font-bold mb-10"> Alimentos </h1>
                 <CreateItem />
             </div>
-            <DataTable Foods={foods} />
+            <DataTable />
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>
