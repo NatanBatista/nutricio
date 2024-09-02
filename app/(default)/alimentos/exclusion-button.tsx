@@ -23,7 +23,7 @@ const ExclusionButton: React.FC<ExclusionButtonProps> = ({
     const deleteFood = async (id: number) => {
         try {
             setLoading(true)
-            await axios.delete('http://localhost:3001/foods/' + id)
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/foods/${id}`)
             toast({
                 description: "Item excluído com sucesso.",
             })

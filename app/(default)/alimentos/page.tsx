@@ -59,7 +59,7 @@ const Alimentos = () => {
 
     async function fetchData() {
         try {
-            const response = await axios.get('http://localhost:3001/foods');
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/foods`);
             setFoods(response.data); // Popula o estado 'food' com os dados da resposta
             console.log(response.data);
         } catch (error) {

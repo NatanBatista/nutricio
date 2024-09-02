@@ -52,7 +52,7 @@ const FormSchema = z.object({
 });
 
 const CreateItem = () => {
-
+    
     const [loading, setLoading] = useState<boolean>(false)
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -90,7 +90,7 @@ const CreateItem = () => {
         try {
             setLoading(true)
             const response = await axios.post(
-                "http://localhost:3001/foods", {
+                `${process.env.NEXT_PUBLIC_API_URL}/foods` , {
                 name: data.name,
                 table: "CADASTRO_PROPRIO",
                 scientific_name: "",
