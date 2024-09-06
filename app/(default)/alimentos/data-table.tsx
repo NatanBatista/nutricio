@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useEffect, useState } from "react";
 import AlterRow from "./alter-row";
+import React, { useEffect, useState } from "react";
 import { ScrollBar, ScrollArea } from "@/components/ui/scroll-area";
 
 import {
@@ -17,7 +17,7 @@ import {
     TableHead, TableBody,
     TableCell
 } from "@/components/ui/table";
-import axios from "axios";
+import { getAxiosClient } from "@/services/fetchClient/axiosClient";
 
 
 
@@ -26,7 +26,8 @@ const DataTable = () => {
     const [foods, setFoods ] = useState<Food[]>([])
     async function fetchData() {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/foods`);
+            const axiosClient = getAxiosClient();
+            const response = await axiosClient.get(`/foods`);
             setFoods(response.data); // Popula o estado 'food' com os dados da resposta
             console.log(response.data);
         } catch (error) {
