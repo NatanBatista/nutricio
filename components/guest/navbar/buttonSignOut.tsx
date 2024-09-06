@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react";
+import { destroyCookie } from "nookies";
 import { signOut } from "next-auth/react";
 
 import {
@@ -9,9 +10,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const ButtonSignOut = () => {
+
+    const handleSignOut = () => {
+        try {
+            signOut()
+            destroyCookie(undefined, "authorization")
+        } catch (e) {
+
+        }
+    }
     return (
         <>
-            <DropdownMenuItem onClick={() => signOut()}>
+            <DropdownMenuItem onClick={handleSignOut}>
                 Log out
                 <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
             </DropdownMenuItem>
