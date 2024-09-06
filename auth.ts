@@ -1,22 +1,23 @@
 import axios from "axios"
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
+import { cookies } from "next/headers"
 import { use } from "react"
 // Your own logic for dealing with plaintext password strings; be careful!
- 
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        email: { label: "email", placeholder: "email"},
-        password: {label:"password", placeholder: "password"},
+        email: { label: "email", placeholder: "email" },
+        password: { label: "password", placeholder: "password" },
       },
       authorize: async (credentials) => {
 
         if (!credentials) {
-            return null
+          return null
         }
 
         try {
@@ -25,15 +26,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             body: JSON.stringify(credentials),
             headers: { "Content-Type": "application/json" }
           })
-          const user = await res.json()
 
-          console.log("AQUI O USER: ", user.data.id)
+          const authorizationHeader = res.headers.get("authorization");
 
-          if (user.data.id) {
+          if (res.status === 200 && authorizationHeader) {
+            const user = await res.json()
+            cookies().set("authorization", authorizationHeader);
+
             return {
+              id: user.data.id,
               email: user.data.uid,
-              name: user.data.name,
-              id: user.data.id
+              name: user.data.nickname,
             };
           } else {
             return null;
