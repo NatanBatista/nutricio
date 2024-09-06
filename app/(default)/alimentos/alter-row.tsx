@@ -26,6 +26,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import axios from "axios"
+import { getAxiosClient } from "@/services/fetchClient/axiosClient"
 
 const FormSchema = z.object({
     calorie: z.number({message: ""}).min(0, ""),
@@ -56,7 +57,7 @@ interface AlterRowProps {
 const AlterRow: React.FC<AlterRowProps> = ({
     Food
 }) => {
-
+    const axiosClient = getAxiosClient();
     const [edit, setEdit] = useState(true)
     const [loading, setLoading] = useState(true)
 
@@ -93,8 +94,8 @@ const AlterRow: React.FC<AlterRowProps> = ({
         // console.log(JSON.stringify(data, null, 2))
         try {
             setLoading(true)
-            const response = await axios.put(
-                `${process.env.NEXT_PUBLIC_API_URL}/foods/${Food.id}` , {
+            const response = await axiosClient.put(
+                `/foods/${Food.id}` , {
                 nutricional_value_attributes: {
                     energy_kcal: data.calorie,
                     total_carbohydrate: data.carbohydrate,

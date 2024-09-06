@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/form"
 import axios from "axios"
 import { useState } from "react"
+import { getAxiosClient } from "@/services/fetchClient/axiosClient"
 
 const FormSchema = z.object({
     name: z.string().min(1, "Nome é obrigatório"),
@@ -52,7 +53,7 @@ const FormSchema = z.object({
 });
 
 const CreateItem = () => {
-    
+    const axiosClient = getAxiosClient();
     const [loading, setLoading] = useState<boolean>(false)
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -89,8 +90,8 @@ const CreateItem = () => {
     const onSubmit = async (data: z.infer<typeof FormSchema>) => {
         try {
             setLoading(true)
-            const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}/foods` , {
+            const response = await axiosClient.post(
+                `/foods` , {
                 name: data.name,
                 table: "CADASTRO_PROPRIO",
                 scientific_name: "",
