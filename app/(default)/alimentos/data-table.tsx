@@ -17,82 +17,103 @@ import {
     TableHead, TableBody,
     TableCell
 } from "@/components/ui/table";
+
 import { getAxiosClient } from "@/services/fetchClient/axiosClient";
+import { useRouter, useSearchParams } from "next/navigation";
+import PaginationGlobal from "@/components/pagination";
 
+interface Meta {
+    current_page: number
+    total_pages: number
+    total_count: number
+}
 
+interface Response {
+    foods: Food[]
+    meta: Meta
+}
 
 const DataTable = () => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const axiosClient = getAxiosClient();
 
-    const [foods, setFoods ] = useState<Food[]>([])
+    const [response, setResponse] = useState<Response | null>(null);
+    const pageFromQuery = searchParams.get('page') || '1';
+    const [page, setPage] = useState<number>(parseInt(pageFromQuery));
+
     async function fetchData() {
         try {
-            const axiosClient = getAxiosClient();
-            const response = await axiosClient.get(`/foods`);
-            setFoods(response.data); // Popula o estado 'food' com os dados da resposta
-            console.log(response.data);
+            const res = await axiosClient.get(`/foods?page=${page}`);
+            setResponse(res.data);
+            console.log(res.data);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     }
 
     useEffect(() => {
-        fetchData(); // Chama a função fetchData quando o componente monta
-    }, []);
+        fetchData();
+    }, [page]);
 
     return (
         <>
-            <ScrollArea className="w-96 sm:whitespace-nowrap sm:w-full">
-                <Table>
+            <ScrollArea >
+                <Table className="w-96 sm:whitespace-nowrap sm:w-full">
                     <TableCaption>Lista de alimentos.</TableCaption>
                     <TableHeader>
                         <TableRow>
                             <TableHead className="w-[100px]">Nome</TableHead>
                             <TableHead className="text-right">Caloria</TableHead>
-                            <TableHead className="text-right"> Carboidratos</TableHead>
-                            <TableHead className="text-right">Proteinas</TableHead>
+                            <TableHead className="text-right">Carboidratos</TableHead>
+                            <TableHead className="text-right">Proteínas</TableHead>
                             <TableHead className="text-right">Ferro</TableHead>
-                            <TableHead className="text-right">Fosforo</TableHead>
+                            <TableHead className="text-right">Fósforo</TableHead>
                             <TableHead className="text-right">Fibras</TableHead>
                             <TableHead className="text-right">Vitamina A</TableHead>
-                            <TableHead className="text-right">Vitamina B</TableHead>
+                            <TableHead className="text-right">Vitamina B6</TableHead>
                             <TableHead className="text-right">Vitamina C</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {foods ?
-                            foods.map(
-                                (Food, index) => (
-                                    <Drawer key={index}>
-                                        <DrawerTrigger asChild>
-                                            <TableRow>
-                                                <TableCell className="font-medium"> {Food.name} </TableCell>
-                                                <TableCell className="text-right">{Food.nutricional_value.energy_kcal}</TableCell>
-                                                <TableCell className="text-right">{Food.nutricional_value.total_carbohydrate}</TableCell>
-                                                <TableCell className="text-right">{Food.nutricional_value.protein}</TableCell>
-                                                <TableCell className="text-right">{Food.nutricional_value.iron}</TableCell>
-                                                <TableCell className="text-right">{Food.nutricional_value.phosphorus}</TableCell>
-                                                <TableCell className="text-right">{Food.nutricional_value.dietary_fiber}</TableCell>
-                                                <TableCell className="text-right">{Food.nutricional_value.vitamin_a}</TableCell>
-                                                <TableCell className="text-right">{Food.nutricional_value.vitamin_b6}</TableCell>
-                                                <TableCell className="text-right">{Food.nutricional_value.vitamin_c}</TableCell>
-                                            </TableRow>
-                                        </DrawerTrigger>
-                                        <DrawerContent>
-                                            <AlterRow Food={Food} />
-                                        </DrawerContent>
-                                    </Drawer>
-                                )
-                            )
-                            :
-                            <></>
-                        }
-
+                        {response ? (
+                            response.foods.map((food, index) => (
+                                <Drawer key={index}>
+                                    <DrawerTrigger asChild>
+                                        <TableRow>
+                                            <TableCell className="font-medium">{food.name}</TableCell>
+                                            <TableCell className="text-right">{food.nutricional_value.energy_kcal}</TableCell>
+                                            <TableCell className="text-right">{food.nutricional_value.total_carbohydrate}</TableCell>
+                                            <TableCell className="text-right">{food.nutricional_value.protein}</TableCell>
+                                            <TableCell className="text-right">{food.nutricional_value.iron}</TableCell>
+                                            <TableCell className="text-right">{food.nutricional_value.phosphorus}</TableCell>
+                                            <TableCell className="text-right">{food.nutricional_value.dietary_fiber}</TableCell>
+                                            <TableCell className="text-right">{food.nutricional_value.vitamin_a}</TableCell>
+                                            <TableCell className="text-right">{food.nutricional_value.vitamin_b6}</TableCell>
+                                            <TableCell className="text-right">{food.nutricional_value.vitamin_c}</TableCell>
+                                        </TableRow>
+                                    </DrawerTrigger>
+                                    <DrawerContent>
+                                        <AlterRow Food={food} />
+                                    </DrawerContent>
+                                </Drawer>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={10} className="text-center">
+                                    Carregando...
+                                </TableCell>
+                            </TableRow>
+                        )}
                     </TableBody>
                 </Table>
                 <ScrollBar orientation="horizontal" />
-            </ScrollArea >
+            </ScrollArea>
+            
+            <PaginationGlobal page={page} total_pages={response?.meta.total_pages ?? 1} setPage={setPage}/>
+            
         </>
-    )
-}
+    );
+};
 
-export default DataTable
+export default DataTable;
