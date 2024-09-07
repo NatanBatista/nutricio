@@ -152,6 +152,8 @@ const AlterRow: React.FC<AlterRowProps> = ({
 
     return (
         <>
+            <div className="mx-auto w-full max-w-md">
+
             <DrawerHeader className="flex justify-between">
                 <div>
                     <DrawerTitle>{Food.name}</DrawerTitle>
@@ -554,6 +556,7 @@ const AlterRow: React.FC<AlterRowProps> = ({
                     </DrawerFooter>
                 </form>
             </Form>
+            </div>
         </>
     )
 }
