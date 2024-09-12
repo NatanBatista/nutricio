@@ -27,6 +27,8 @@ import {
 } from "@/components/ui/form"
 import axios from "axios"
 import { getAxiosClient } from "@/services/fetchClient/axiosClient"
+import { toast } from "@/components/ui/use-toast"
+import { useRouter } from "next/navigation"
 
 const FormSchema = z.object({
     calorie: z.number({message: ""}).min(0, ""),
@@ -57,7 +59,8 @@ interface AlterRowProps {
 const AlterRow: React.FC<AlterRowProps> = ({
     Food
 }) => {
-    const axiosClient = getAxiosClient();
+    const router = useRouter()
+    const axiosClient = getAxiosClient()
     const [edit, setEdit] = useState(true)
     const [loading, setLoading] = useState(true)
 
@@ -120,9 +123,12 @@ const AlterRow: React.FC<AlterRowProps> = ({
             }
             )
 
-            setTimeout(() => {
-                window.location.reload();
-            }, 700);
+            router.push("/")
+
+            toast({
+                variant: "default",
+                title: "Item alterado com sucesso!",
+            })
 
             console.log(response)
         } catch (error) {
