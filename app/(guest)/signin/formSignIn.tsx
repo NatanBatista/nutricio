@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import Link from "next/link"
 import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/navigation"
 import { LoaderCircle } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -18,7 +19,11 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { useRouter } from "next/navigation"
+
+interface SignInResponse {
+    success: boolean
+    errors: string[]
+}
 
 const FormSchema = z.object({
     email: z.string().email({
@@ -46,14 +51,26 @@ const FormSignIn = () => {
         try {
             setisLoading(true)
             // Realizando o sign-in com o NextAuth.js
-            const result = await signIn("credentials", {
+            const result: any = await signIn("credentials", {
               redirect: false, // Impede o redirecionamento automático após o login
               email: data.email,
               password: data.password,
             });
 
-            router.push('/alimentos')
+            if (result.error) {
+                console.log("passei aqui error", result.error)
+                toast({
+                    variant: "destructive",
+                    title: "Falha ao efetuar login",
+                    description: `E-mail/senha incorretos ou conta não confirmada. Cheque a sua caixa de span: ${data.email}.`
+                })
+            }
+
+            // // Redirecionando para a página de alimentos
+            router.push("/alimentos")
+            
         } catch (error: any) {
+            console.log("passei aqui catch")
             const errors = error.response.data.errors
             if (errors.full_messages) {
                 errors.full_messages.forEach((message: string) => {
