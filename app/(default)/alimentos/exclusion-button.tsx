@@ -18,22 +18,28 @@ import {
     DialogTitle, 
     DialogTrigger 
 } from "@/components/ui/dialog"
+import { getAxiosClient } from "@/services/fetchClient/axiosClient"
 
 interface ExclusionButtonProps {
-    id: number
+    ids: number[]
 }
 
 const ExclusionButton: React.FC<ExclusionButtonProps> = ({
-    id
+    ids
 }) => {
     
     const router = useRouter()
+    const axiosClient = getAxiosClient()
     const [loading, setLoading] = useState<boolean>(false)
 
-    const deleteFood = async (id: number) => {
+    const deleteFood = async (ids: number[]) => {
         try {
             setLoading(true)
-            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/foods/${id}`)
+            await axiosClient.delete(`${process.env.NEXT_PUBLIC_API_URL}/foods/bulk_destroy`,
+            {
+                data: { ids: ids }
+            }
+            )
             router.push("/")
             toast({
                 description: "Item excluído com sucesso.",
@@ -43,7 +49,6 @@ const ExclusionButton: React.FC<ExclusionButtonProps> = ({
                 variant: "destructive",
                 title: "Uh oh! Algo deu errado.",
                 description: "Houve um problema e não conseguimos deletar o alimento.",
-                action: <ToastAction altText="Tente novamente" onClick={() => deleteFood}>Tente novamente!</ToastAction>,
               })
         } finally {
             setLoading(false)
@@ -53,7 +58,7 @@ const ExclusionButton: React.FC<ExclusionButtonProps> = ({
     return (
         <>
             <Dialog>
-                <DialogTrigger asChild><Button variant="destructive">Excluir</Button></DialogTrigger>
+                <DialogTrigger asChild><Button className="mr-3" variant="destructive">Excluir</Button></DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Você tem certeza??</DialogTitle>
@@ -66,7 +71,7 @@ const ExclusionButton: React.FC<ExclusionButtonProps> = ({
                         {loading ?
                         <Button className="w-24" variant="destructive"> <LoaderCircle className="mr-2 h-6 w-6 animate-spin" /> </Button> 
                         :
-                        <Button className="w-24" onClick={() => deleteFood(id)} variant="destructive">Excluir </Button>
+                        <Button className="w-24" onClick={() => deleteFood(ids)} variant="destructive">Excluir </Button>
                         }
                         <DialogClose asChild>
                             <Button variant="outline"> Cancelar </Button>
