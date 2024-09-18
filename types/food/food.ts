@@ -34,3 +34,19 @@ interface Food {
     updated_at: string;
     nutricional_value: NutricionalValue;
 }
+
+interface Foods {
+    foods: Food[]
+}
+
+
+interface Meta {
+    current_page: number
+    total_pages: number
+    total_count: number
+}
+
+interface ResponseFood {
+    foods: Food[]
+    meta: Meta
+}
