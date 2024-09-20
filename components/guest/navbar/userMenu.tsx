@@ -25,6 +25,7 @@ import { Button } from "../../ui/button"
 import { useContext } from "react"
 import ButtonSignOut from "./buttonSignOut"
 import { redirect } from "next/navigation"
+import Link from "next/link"
 // import { AuthContext } from "@/app/contexts/AuthContext"
 
 const UserMenu = async () => {
@@ -43,12 +44,14 @@ const UserMenu = async () => {
                     <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                        <DropdownMenuItem>
-                            Perfil
-                            <DropdownMenuShortcut>
-                                ⇧⌘P
-                            </DropdownMenuShortcut>
-                        </DropdownMenuItem>
+                        <Link href="/perfil">
+                            <DropdownMenuItem>
+                                Perfil
+                                <DropdownMenuShortcut>
+                                    ⇧⌘P
+                                </DropdownMenuShortcut>
+                            </DropdownMenuItem>
+                        </Link>
                         <DropdownMenuItem disabled>
                             Settings
                             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
