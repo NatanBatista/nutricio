@@ -90,7 +90,7 @@ const FormSignIn = () => {
     return (
         <div className="flex justify-center items-center my-10">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/4 space-y-6">
                     <FormField
                         control={form.control}
                         name="email"
