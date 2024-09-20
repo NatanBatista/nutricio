@@ -30,8 +30,8 @@ const FormSchema = z.object({
     email: z.string().email({
         message: "Email incorreto."
     }),
-    nickname: z.string().min(3, {
-        message: "Seu apelido deve ter pelo menos 3 caracteres"
+    name: z.string().min(3, {
+        message: "Seu Nome deve ter pelo menos 3 caracteres"
     }),
     password: z.string().min(8, {
         message: "A senha deve ter pelo menos 8 caracteres",
@@ -53,7 +53,7 @@ const SignUp = () => {
         resolver: zodResolver(FormSchema),
         defaultValues: {
             email: "",
-            nickname: "",
+            name: "",
             password: "",
             password_confirmation: "",
         },
@@ -69,7 +69,7 @@ const SignUp = () => {
             setIsLoading(true)
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth`, {
                 "email": data.email,
-                "nickname": data.nickname,
+                "name": data.name,
                 "password": data.password,
                 "password-confirmation": data.password_confirmation
             })
@@ -133,12 +133,12 @@ const SignUp = () => {
                                     />
                                     <FormField
                                         control={form.control}
-                                        name="nickname"
+                                        name="name"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Apelido</FormLabel>
+                                                <FormLabel>Nome</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="apelido" {...field} />
+                                                    <Input placeholder="Nome" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
