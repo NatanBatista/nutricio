@@ -1,15 +1,15 @@
 "use client"
-import { z } from "zod" 
+
+import { z } from "zod"
 import React, { useState } from "react"
-import Link from "next/link"
-import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
-import { useRouter } from "next/navigation"
 import { LoaderCircle } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useSearchParams, useRouter } from "next/navigation"
+import { getAxiosClient } from "@/services/fetchClient/axiosClient"
 
 import {
     Form,
@@ -20,60 +20,68 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 
-interface SignInResponse {
-    success: boolean
-    errors: string[]
-}
-
 const FormSchema = z.object({
-    email: z.string().email({
-        message: "Email incorreto."
+    password: z.string().min(8, {
+        message: "A senha deve ter pelo menos 8 caracteres",
     }),
-    password: z.string().min(6, {
-        message: "A senha deve ter pelo menos 6 caracteres",
+    password_confirmation: z.string().min(8, {
+        message: "A confirmação senha deve ter pelo menos 8 caracteres",
     }),
+}).refine(data => data.password === data.password_confirmation, {
+    message: "As senhas não coincidem",
+    path: ["password_confirmation"]
 })
 
-const FormSignIn = () => {
+const ResetPassword = () => { //
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
-    const [isLoading, setisLoading] = useState(false)
-    
+    const axiosClient = getAxiosClient()
+
+    const searchParams = useSearchParams()
+    const accessToken = searchParams.get("access-token")
+    const client = searchParams.get("client")
+    const uid = searchParams.get("uid")
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            email: "",
             password: "",
+            password_confirmation: "",
         },
     })
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         try {
-            setisLoading(true)
-            // Realizando o sign-in com o NextAuth.js
-            const result: any = await signIn("credentials", {
-              redirect: false, // Impede o redirecionamento automático após o login
-              email: data.email,
-              password: data.password,
-            });
-
-            if (result.error) {
-                console.log("passei aqui error", result.error)
-                toast({
-                    variant: "destructive",
-                    title: "Falha ao efetuar login",
-                    description: `E-mail/senha incorretos ou conta não confirmada. Cheque a sua caixa de span: ${data.email}.`
+            setIsLoading(true)
+            const response = await axiosClient.put("/auth/password", {
+                "password": data.password,
+                "password_confirmation": data.password_confirmation
+            },
+                {
+                    headers: {
+                        "access-token": accessToken,
+                        "client": client,
+                        "uid": uid,
+                    },
                 })
-            }
-
-            // // Redirecionando para a página de alimentos
-            router.push("/alimentos")
-            
+            toast({
+                variant: "default",
+                title: "Sucesso",
+                description: response.data.message
+            })
+            router.replace("/signin")
         } catch (error: any) {
-            console.log("passei aqui catch")
+            console.error(error)
             const errors = error.response.data.errors
             if (errors.full_messages) {
-                errors.full_messages.forEach((message: string) => {
+                toast({
+                    variant: "destructive",
+                    title: "Erro",
+                    description: "Se você recebeu um e-mail para redefinir sua senha, por favor, certifique-se de estar usando a URL correta",
+                })
+            }
+            else {
+                errors.forEach((message: string) => {
                     toast({
                         variant: "destructive",
                         title: "Erro",
@@ -82,28 +90,14 @@ const FormSignIn = () => {
                 })
             }
         } finally {
-            setisLoading(false)
+            setIsLoading(false)
         }
-    
-      } 
-
+    }
     return (
         <div className="flex justify-center items-center my-10">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>E-mail</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="e-mail" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+
                     <FormField
                         control={form.control}
                         name="password"
@@ -111,24 +105,36 @@ const FormSignIn = () => {
                             <FormItem>
                                 <FormLabel>Senha</FormLabel>
                                 <FormControl>
-                                    <Input type="password" placeholder="senha" {...field} />
+                                    <Input type="password" placeholder="Senha" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
+
                         )}
                     />
-                    <div className="flex justify-end">
-                        <Link className="tracking-tight text-xs underline hover:text-gray-300" href={"/forgot-password"} > esqueceu a senha?</Link>
-                    </div>
+                    <FormField
+                        control={form.control}
+                        name="password_confirmation"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Confirmação de senha</FormLabel>
+                                <FormControl>
+                                    <Input type="password" placeholder="Confirmar senha" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+
+                        )}
+                    />
                     {isLoading ? (
                         <Button >
                             <LoaderCircle className="mr-2 h-6 w-6 animate-spin" />
-                            Entrando...
+                            Alterando...
                         </Button>
                     ) :
                         (
                             <Button type="submit">
-                                Entrar
+                                Alterar
                             </Button>
                         )}
                 </form>
@@ -137,4 +143,4 @@ const FormSignIn = () => {
     )
 }
 
-export default FormSignIn
+export default ResetPassword
