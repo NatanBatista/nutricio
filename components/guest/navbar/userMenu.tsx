@@ -22,21 +22,23 @@ import {
 
 import React from "react"
 import { Button } from "../../ui/button"
-import { useContext } from "react"
 import ButtonSignOut from "./buttonSignOut"
 import { redirect } from "next/navigation"
 import Link from "next/link"
+import { auth } from "@/auth"
 // import { AuthContext } from "@/app/contexts/AuthContext"
 
 const UserMenu = async () => {
+    const session = await auth()
+
     return (
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="clean">
                         <Avatar>
-                            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                            <AvatarFallback>NB </AvatarFallback>
+                            <AvatarImage src={`${(session?.user?.image ?? "")}`} alt="@shadcn" />
+                            <AvatarFallback> {session?.user?.name?.split(" ").map(word => word[0]).join("")} </AvatarFallback>
                         </Avatar>
                     </Button>
                 </DropdownMenuTrigger>
