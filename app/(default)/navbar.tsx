@@ -1,13 +1,14 @@
 import ButtonTheme from "@/components/buttonTheme";
 import UserMenu from "@/components/guest/navbar/userMenu";
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 import React from "react";
 
 
 const elementosBarra = [
-    { nome: "Alimentos", path: "/path/to/icon1.svg" },
-    { nome: "Sobre", path: "/path/to/icon2.svg" },
-    { nome: "Contato", path: "/path/to/icon3.svg" }
+    { nome: "Alimentos", pathIcon: "/path/to/icon1.svg", path: "/alimentos" },
+    { nome: "Sobre", pathIcon: "/path/to/icon2.svg", path: "/"},
+    { nome: "Contato", pathIcon: "/path/to/icon3.svg", path: "/"}
 ];
 
 type NavbarDefaultProps = {
@@ -26,14 +27,14 @@ const NavbarDefault: React.FC<NavbarDefaultProps> = ({
                 </div>
                 <nav className="flex flex-col flex-grow items-start">
                     {elementosBarra.map((item, index) => (
-                        <li
+                        <Link href={item.path}
                             key={index}
                             className="relative flex pl-4 h-12 w-full transition hover:bg-gray-100 dark:hover:bg-gray-700 items-center">
                             {/* <Image src={item.path} width={14} height={16} alt="logo" /> */}
                             <span>{item.nome}</span>
                             {/* Pseudo-elemento para a borda interna */}
                             <div className="absolute inset-0 border-l-4 dark:border-gray-800 opacity-0 transition duration-200 hover:opacity-100" />
-                        </li>
+                        </Link>
                     ))}
                 <Separator orientation="vertical" />
                 </nav>
