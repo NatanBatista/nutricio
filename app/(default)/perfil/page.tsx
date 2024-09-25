@@ -1,15 +1,19 @@
-import { auth } from "@/auth"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { redirect } from "next/navigation"
 import AlterData from "./alter-data"
-import { Input } from "@/components/ui/input"
+import React, { useState } from "react";
+import UpdatePicture from "./updatePicture"
+import { auth } from "@/auth";
 
 const Perfil = async () => {
     const session = await auth()
- 
+
     if (!session) {
         redirect('/')
     }
+    console.log(session)
+
+    
+
     return (
         <div className="w-1/4 space-y-6">
             <div className="flex justify-between">
@@ -17,11 +21,7 @@ const Perfil = async () => {
             </div>
 
             <div>
-            <Avatar className="w-36 h-36 ml-10">
-                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                <AvatarFallback>NB </AvatarFallback>
-            </Avatar>
-            <Input className="mt-4" id="picture" type="file"></Input>
+                <UpdatePicture image={session.user?.image ?? ""} name={session.user?.name ?? ""}/>
             </div>
             <AlterData />
         </div>
