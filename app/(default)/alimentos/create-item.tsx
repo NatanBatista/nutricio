@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { z } from "zod"
 import { LoaderCircle, Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -25,7 +26,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import axios from "axios"
+
 import { useState } from "react"
 import { getAxiosClient } from "@/services/fetchClient/axiosClient"
 
@@ -125,8 +126,8 @@ const CreateItem = () => {
             }, 700);
 
             console.log(response)
-        } catch (error) {
-            return null
+        } catch (e) {
+            console.error(e)
         } finally {
             setLoading(false)
         }
@@ -134,7 +135,7 @@ const CreateItem = () => {
 
     const handleNumberChange = (
         e: React.ChangeEvent<HTMLInputElement>,
-        onChange: (value: any) => void
+        onChange: (value: unknown) => void
     ) => {
         // Substitui vírgulas por pontos para permitir a entrada de valores decimais
         const inputValue = e.target.value.replace(',', '.');

@@ -1,4 +1,5 @@
 import Navbar from "@/components/guest/navbar/navbar"
+import React from "react"
 
 export default function GuestLayout({
     children, // will be a page or nested layout

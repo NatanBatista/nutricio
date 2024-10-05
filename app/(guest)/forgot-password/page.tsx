@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { z } from "zod"
-import axios from "axios"
 import React from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
@@ -19,8 +17,8 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { get } from "http"
 import { getAxiosClient } from "@/services/fetchClient/axiosClient"
+import axios from "axios"
 
 const FormSchema = z.object({
     email: z.string().email({
@@ -52,15 +50,23 @@ const ForgotPassword = () => {
 
             })
             router.push("/signin")
-        } catch (error: any) {
-            const errors = error.response.data.errors
-            if (errors) {
-                errors.forEach((message: string) => {
-                    toast({
-                        variant: "destructive",
-                        title: "Erro",
-                        description: message,
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                const errors = error.response.data.errors
+                if (errors) {
+                    errors.forEach((message: string) => {
+                        toast({
+                            variant: "destructive",
+                            title: "Erro",
+                            description: message,
+                        })
                     })
+                }
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Erro",
+                    description: "Ocorreu um erro inesperado.",
                 })
             }
         }

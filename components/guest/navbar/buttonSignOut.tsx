@@ -16,7 +16,7 @@ const ButtonSignOut = () => {
             signOut()
             destroyCookie(undefined, "authorization")
         } catch (e) {
-
+            console.error(e)
         }
     }
     return (

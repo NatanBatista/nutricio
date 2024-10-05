@@ -1,8 +1,6 @@
-import axios from "axios"
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { cookies } from "next/headers"
-import { use } from "react"
 // Your own logic for dealing with plaintext password strings; be careful!
 
 export const { handlers, signIn, signOut, auth } = NextAuth({

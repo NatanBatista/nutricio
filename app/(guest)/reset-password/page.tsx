@@ -19,6 +19,8 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import axios from "axios"
+
 
 const FormSchema = z.object({
     password: z.string().min(8, {
@@ -70,9 +72,10 @@ const ResetPassword = () => { //
                 description: response.data.message
             })
             router.replace("/signin")
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error)
-            const errors = error.response.data.errors
+            if (axios.isAxiosError(error) && error.response) {
+                const errors = error.response.data.errors
             if (errors.full_messages) {
                 toast({
                     variant: "destructive",
@@ -88,7 +91,7 @@ const ResetPassword = () => { //
                         description: message,
                     })
                 })
-            }
+            }}
         } finally {
             setIsLoading(false)
         }

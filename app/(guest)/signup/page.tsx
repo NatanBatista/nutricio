@@ -81,10 +81,28 @@ const SignUp = () => {
                     response.data.data.email
                 }`
             })
-        } catch (error: any) {
-            const errors = error.response.data.errors
-            if (errors.full_messages) {
-                errors.full_messages.forEach((message: string) => {
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                const errors = error.response.data.errors
+                if (errors.full_messages) {
+                    errors.full_messages.forEach((message: string) => {
+                        toast({
+                            variant: "destructive",
+                            title: "Erro",
+                            description: message,
+                        })
+                    })
+                }
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Erro",
+                    description: "Ocorreu um erro inesperado.",
+                })
+            }
+            const typedError = error as { full_messages?: string[] };
+            if (typedError.full_messages) {
+                typedError.full_messages.forEach((message: string) => {
                     toast({
                         variant: "destructive",
                         title: "Erro",

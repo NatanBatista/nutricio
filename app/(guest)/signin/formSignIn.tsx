@@ -20,10 +20,6 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 
-interface SignInResponse {
-    success: boolean
-    errors: string[]
-}
 
 const FormSchema = z.object({
     email: z.string().email({
@@ -51,11 +47,11 @@ const FormSignIn = () => {
         try {
             setisLoading(true)
             // Realizando o sign-in com o NextAuth.js
-            const result: any = await signIn("credentials", {
+            const result = await signIn("credentials", {
               redirect: false, // Impede o redirecionamento automático após o login
               email: data.email,
               password: data.password,
-            });
+            }) as { error?: string };
 
             if (result.error) {
                 console.log("passei aqui error", result.error)
@@ -69,18 +65,16 @@ const FormSignIn = () => {
             // // Redirecionando para a página de alimentos
             router.push("/alimentos")
             
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.log("passei aqui catch")
-            const errors = error.response.data.errors
-            if (errors.full_messages) {
-                errors.full_messages.forEach((message: string) => {
-                    toast({
-                        variant: "destructive",
-                        title: "Erro",
-                        description: message,
-                    })
-                })
-            }
+        if (error instanceof Error) {
+            const errorMessage = error.message || "Ocorreu um erro desconhecido.";
+            toast({
+                variant: "destructive",
+                title: "Erro",
+                description: errorMessage,
+            });
+        }
         } finally {
             setisLoading(false)
         }

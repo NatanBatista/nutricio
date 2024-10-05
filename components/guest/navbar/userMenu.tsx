@@ -23,7 +23,6 @@ import {
 import React from "react"
 import { Button } from "../../ui/button"
 import ButtonSignOut from "./buttonSignOut"
-import { redirect } from "next/navigation"
 import Link from "next/link"
 import { auth } from "@/auth"
 // import { AuthContext } from "@/app/contexts/AuthContext"
