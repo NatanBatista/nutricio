@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import React from "react"
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -76,7 +76,7 @@ export type Payment = {
   email: string
 }
 
-export const columns: ColumnDef<Payment>[] = [
+const columns: ColumnDef<Payment>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -175,7 +175,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
 ]
 
-const DataTableDemo = () => {
+const Pacientes = () => {
     
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -320,4 +320,4 @@ const DataTableDemo = () => {
   )
 }
 
-export default DataTableDemo
+export default Pacientes
