@@ -2,7 +2,6 @@
 "use client"
 
 import { z } from "zod"
-import axios from "axios"
 import React from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
@@ -19,7 +18,6 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { get } from "http"
 import { getAxiosClient } from "@/services/fetchClient/axiosClient"
 
 const FormSchema = z.object({

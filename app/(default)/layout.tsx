@@ -1,5 +1,5 @@
 import NavbarDefault from "./navbar"
-
+import React from "react"
 
 export default function DefaultLayout({
     children, // will be a page or nested layout

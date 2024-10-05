@@ -7,7 +7,7 @@ import ExclusionButton from "./exclusion-button"
 import React, { useEffect, useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import PaginationGlobal from "@/components/pagination"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { getAxiosClient } from "@/services/fetchClient/axiosClient"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 
@@ -138,7 +138,7 @@ export const columns: ColumnDef<Food>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
+      // const payment = row.original
 
       return (
         <Drawer key={row.id}>
@@ -285,6 +285,7 @@ const DataTable = () => {
                 table.getRowModel().rows.map((row) => (
 
                   <TableRow
+                  key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (

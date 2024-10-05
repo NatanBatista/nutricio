@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import AlterData from "./alter-data"
-import React, { useState } from "react";
+import React from "react";
 import UpdatePicture from "./updatePicture"
 import { auth } from "@/auth";
 

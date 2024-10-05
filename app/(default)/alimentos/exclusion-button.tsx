@@ -1,12 +1,10 @@
 "use client"
 
-import axios from "axios"
 import React, { useState } from "react"
 import { LoaderCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
-import { ToastAction } from "@/components/ui/toast"
 import { DialogClose } from "@radix-ui/react-dialog"
 
 import { 
@@ -44,7 +42,7 @@ const ExclusionButton: React.FC<ExclusionButtonProps> = ({
             toast({
                 description: "Item excluído com sucesso.",
             })
-        } catch (error) {
+        } catch {
             toast({
                 variant: "destructive",
                 title: "Uh oh! Algo deu errado.",

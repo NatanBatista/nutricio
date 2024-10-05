@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 
 // import { useRouter } from "next/navigation"
 
@@ -20,10 +20,8 @@ import {
 
 import { Input } from "@/components/ui/input"
 // import axios from "axios"
-import { useState } from "react"
-import { toast } from "@/components/ui/use-toast"
-import Link from "next/link"
-import { LoaderCircle } from "lucide-react"
+// import { useState } from "react"
+// import { LoaderCircle } from "lucide-react"
 
 
     const FormSchema = z.object({
@@ -35,7 +33,7 @@ import { LoaderCircle } from "lucide-react"
         }),
     })
 const AlterData = () => {
-    const [isLoading, setIsLoading] = useState(false)
+    // const [isLoading, setIsLoading] = useState(false)
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -79,7 +77,7 @@ const AlterData = () => {
                         )}
                     />
 
-                    {isLoading ? (
+                    {/* {isLoading ? (
                         <Button >
                             <LoaderCircle className="mr-2 h-6 w-6 animate-spin" />
                             Alterando...
@@ -89,7 +87,7 @@ const AlterData = () => {
                             <Button type="submit">
                                 Alterar
                             </Button>
-                        )}
+                        )} */}
                 </form>
             </Form>
         </>

@@ -60,7 +60,7 @@ const AlterRow: React.FC<AlterRowProps> = ({
     const router = useRouter()
     const axiosClient = getAxiosClient()
     const [edit, setEdit] = useState(true)
-    const [loading, setLoading] = useState(true)
+    // const [loading, setLoading] = useState(true)
 
     const EditingValues = () => {
         setEdit(!edit)
@@ -94,7 +94,7 @@ const AlterRow: React.FC<AlterRowProps> = ({
     const onSubmit = async (data: z.infer<typeof FormSchema>) => {
         // console.log(JSON.stringify(data, null, 2))
         try {
-            setLoading(true)
+            // setLoading(true)
             const response = await axiosClient.put(
                 `/foods/${Food.id}`, {
                 nutricional_value_attributes: {
@@ -129,16 +129,16 @@ const AlterRow: React.FC<AlterRowProps> = ({
             })
 
             console.log(response)
-        } catch (error) {
-            return null
+        } catch (e) {
+            console.error(e)
         } finally {
-            setLoading(false)
+            // setLoading(false)
         }
     }
 
     const handleNumberChange = (
         e: React.ChangeEvent<HTMLInputElement>,
-        onChange: (value: any) => void
+        onChange: (value: unknown) => void
     ) => {
         // Substitui vírgulas por pontos para permitir a entrada de valores decimais
         const inputValue = e.target.value.replace(',', '.');

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { z } from "zod"
@@ -19,6 +20,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+
 
 const FormSchema = z.object({
     password: z.string().min(8, {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import { z } from "zod" 
 import React, { useState } from "react"
@@ -20,10 +21,6 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 
-interface SignInResponse {
-    success: boolean
-    errors: string[]
-}
 
 const FormSchema = z.object({
     email: z.string().email({
