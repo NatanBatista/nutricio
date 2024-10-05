@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { z } from "zod"
@@ -20,6 +21,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import axios from "axios"
+
 
 
 const FormSchema = z.object({
